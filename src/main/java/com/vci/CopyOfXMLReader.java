@@ -26,7 +26,7 @@ public class CopyOfXMLReader {
 	static Polygon1 polygon = new Polygon1(1);
 
 	public static void main(String[] args) {
-		String cityName = "haryana";
+		String cityName = "andhrapradesh";
 		CopyOfXMLReader xmlReader = new CopyOfXMLReader();
 		xmlReader.parseXmlFile(cityName);
 		xmlReader.parseDocument();
@@ -47,7 +47,7 @@ public class CopyOfXMLReader {
 
 		Point minPoint = null;
 
-		for (int i = 0; i < size-50; i++) {
+		for (int i = 0; i < size; i++) {
 			double minDistance = 1000000;
 			for (Point point : initialPoints) {
 				double distance = Distance.distance(currPoint.lat,
@@ -82,7 +82,7 @@ public class CopyOfXMLReader {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			File file = new File("/home/pratik/Work/poc/code/states_raw_xml/"
+			File file = new File("/home/pratik/Work/poc/visuals-crime-india/src/main/webapp/archived-data/states_raw_xml/"
 					+ cityname + ".xml");
 			dom = db.parse(file);
 		} catch (ParserConfigurationException pce) {
@@ -97,7 +97,7 @@ public class CopyOfXMLReader {
 	private static void writeData(String cityName, String response) {
 		Writer writer = null;
 		try {
-			String name = "/home/pratik/Installations/tomcat/webapps/bootstrap/Data/cities/"
+			String name = "/home/pratik/Desktop/"
 					+ cityName;
 			File file = new File(name);
 			file.createNewFile();
