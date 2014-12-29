@@ -1,4 +1,7 @@
 var polygons = new Array();
+var sunburstGraph = new Object();
+var years = new Array("2001", "2002", "2003", "2004", "2005", "2006", "2007",
+		"2008", "2009", "2010", "2011", "2012");
 
 function initStates() {
 	var mapOptions = {
@@ -44,9 +47,7 @@ function initStates() {
 		polyContainer.state = state.toUpperCase();
 		polyContainer.polygon = polygon;
 		polygons.push(polyContainer);
-
 		attachInfoWindow(polygon, map, polygon.state);
-
 		polygon.setMap(map);
 
 	}
@@ -197,8 +198,10 @@ function attachInfoWindow(polygon, map, html) {
 
 var crimesData = new Object();
 var iCrimes = new Object();
+var crimesList = new Array();
 var iStates = new Object();
 var states = new Object();
+var statesList = new Array();
 
 $.ajax({
 	url : "Data/crimes/crimes.txt",
@@ -223,6 +226,7 @@ $.ajax({
 		});
 
 		createStatesSubList();
+		createCrimeSubList();
 		initDropDowns();
 		initStates();
 
@@ -241,6 +245,18 @@ function createStatesSubList() {
 
 		} else {
 			states[m] = m;
+			statesList.push(m);
+		}
+		// states["TELANGANA"]="TELANGANA";
+	}
+}
+
+function createCrimeSubList() {
+	for ( var m in iCrimes) {
+		if (m == "TOTAL CRIMES AGAINST WOMEN") {
+
+		} else {
+			crimesList.push(m);
 		}
 		// states["TELANGANA"]="TELANGANA";
 	}
@@ -259,8 +275,10 @@ function initDropDowns() {
 		$("#crime").append(o);
 	}
 
-	var years = new Array("2001", "2002", "2003", "2004", "2005", "2006",
-			"2007", "2008", "2009", "2010", "2011", "2012");
+	years.sort(function(a, b) {
+		return b - a;
+	})
+
 	for (var y = 0; y < years.length; y++) {
 		var o = new Option(years[y], years[y]);
 		$(o).html(years[y]);
@@ -328,26 +346,59 @@ function updateVisual() {
 			});
 
 	updateLineChart();
+	updateSunBurst();
+}
+
+function updateSunBurst() {
+	sunburstGraph.name = "Stats";
+
+	var stateChildrens = new Array();
+
+	for ( var j in statesList) {
+		var state = new Object();
+		state.name = statesList[j];
+
+		var crimeChildrens = new Array();
+		for ( var m in crimesList) {
+			var crime = new Object();
+			crime.name = crimesList[m].substring(0, 10);
+
+			var yearChildrens = new Array();
+			var year = new Object();
+			year.name = $("#years").val();
+			year.size = crimesData[statesList[j]][crimesList[m]][year.name];
+			yearChildrens.push(year);
+
+			crime.size = crimesData[statesList[j]][crimesList[m]][year.name];
+			// crime.children=yearChildrens;
+			crimeChildrens.push(crime);
+		}
+
+		state.children = crimeChildrens;
+		stateChildrens.push(state);
+	}
+
+	sunburstGraph.children = stateChildrens;
+	initburst(sunburstGraph);
 }
 
 function updateLineChart() {
 	var xAxis = new Array();
 	xAxis.push("x")
-	xAxis.push("2001")
-	xAxis.push("2002")
-	xAxis.push("2003")
-	xAxis.push("2004")
-	xAxis.push("2005")
-	xAxis.push("2006")
-	xAxis.push("2007");
-	xAxis.push("2008");
-	xAxis.push("2009");
-	xAxis.push("2010");
-	xAxis.push("2011");
-	xAxis.push("2012");
+	xAxis.push('2002-01-01');
+	xAxis.push('2003-01-01');
+	xAxis.push('2004-01-01');
+	xAxis.push('2005-01-01');
+	xAxis.push('2006-01-01');
+	xAxis.push('2007-01-01');
+	xAxis.push('2008-01-01');
+	xAxis.push('2009-01-01');
+	xAxis.push('2010-01-01');
+	xAxis.push('2011-01-01');
+	xAxis.push('2012-01-01');
+	xAxis.push('2013-01-01');
 
 	lineGraph = new Array();
-	lineGraph.push(xAxis);
 
 	for (var index = 0; index < polygons.length; index++) {
 		stateContainer = new Array();
@@ -362,10 +413,10 @@ function updateLineChart() {
 		lineGraph.push(stateContainer);
 	}
 
+	lineGraph.unshift(xAxis);
 	var chart = c3.generate({
 		data : {
 			x : 'x',
-			xFormat : '%YYYY', // 'xFormat' can be used as custom format of 'x'
 			columns : [ xAxis, lineGraph[1], lineGraph[2], lineGraph[3],
 					lineGraph[4], lineGraph[5] ]
 		},
@@ -373,7 +424,7 @@ function updateLineChart() {
 			x : {
 				type : 'timeseries',
 				tick : {
-					format : '%Y'
+					format : '%Y-%m-%d'
 				}
 			}
 		}
