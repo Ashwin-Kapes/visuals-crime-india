@@ -13,9 +13,9 @@ function initialize() {
 
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-	$.each(allpolygons, function(i, polygon) {
-		bermudaTriangle = new google.maps.Polygon({
-			paths : polygon,
+	$.each(allpolygons, function(i, area) {
+		polygon = new google.maps.Polygon({
+			paths : area.coords,
 			strokeColor : '#FFFFFF',
 			geodesic : true,
 			strokeOpacity : 1.0,
@@ -24,9 +24,27 @@ function initialize() {
 			fillOpacity : 0.35
 		});
 
-		bermudaTriangle.setMap(map);
+		polygon.setMap(map);
+		attachInfoWindow(polygon, map, area.title);
 
 	});
+
+	function attachInfoWindow(poly, map, html) {
+		google.maps.event.addListener(poly, 'mouseover',
+				function(e) {
+					var infoWindow = new google.maps.InfoWindow();
+					infoWindow.setContent("<div style='width:70px'>" + html
+							+ "</div>");
+					var latLng = e.latLng;
+					infoWindow.setPosition(latLng);
+					infoWindow.open(map);
+					poly.infoWindow = infoWindow;
+				});
+
+		google.maps.event.addListener(poly, 'mouseout', function() {
+			poly.infoWindow.close(map);
+		});
+	}
 
 	var allowedBounds = new google.maps.LatLngBounds(new google.maps.LatLng(
 			28.0, 77.0), new google.maps.LatLng(29.0, 78.0));
@@ -239,22 +257,46 @@ function getData() {
 	ids.push(23737810);
 	ids.push(4813129);
 	ids.push(21085952);
+	ids.push(11454790)
+	ids.push(11454758);
+	ids.push(11454276);
+	ids.push(4880320);
+	ids.push(13611172);
+	ids.push(4880030);
+	ids.push(4976745);
+	ids.push(4976838);
+	ids.push(16140942);
+	ids.push(17094943);
+	ids.push(16187797);
+	ids.push(3602831);
+	ids.push(21085952);
+	ids.push(3314640);
+	ids.push(18820478);
+	ids.push(11454658);
+	ids.push(4880793);
+	ids.push(21086078);
+	ids.push(23129256);
+	ids.push(18434837);
+	ids.push(22683516);
 
-	var ids1 = [];
 	$.each(ids, function(id, loc) {
 		$.ajax({
 			url : "Data/gurgaon/" + loc,
 			success : function(data) {
-				var triangleCoords = [];
+				var polygon = new Object();
+				var coords = [];
 				$.each(data.polygon, function(c, s) {
-					triangleCoords.push(new google.maps.LatLng(s.y, s.x));
+					coords.push(new google.maps.LatLng(s.y, s.x));
 				});
-				allpolygons.push(triangleCoords);
+				polygon.coords = coords;
+				polygon.title = data.title;
+				allpolygons.push(polygon);
 			},
 			async : false,
 			type : "GET",
 			dataType : 'json'
 		});
+
 	});
 	initialize();
 }

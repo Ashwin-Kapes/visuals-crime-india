@@ -47,7 +47,9 @@ function initStates() {
 		polyContainer.state = state.toUpperCase();
 		polyContainer.polygon = polygon;
 		polygons.push(polyContainer);
+
 		attachInfoWindow(polygon, map, polygon.state);
+
 		polygon.setMap(map);
 
 	}
@@ -181,19 +183,30 @@ function initStates() {
 
 }
 
-function attachInfoWindow(polygon, map, html) {
-	infoWindow = new google.maps.InfoWindow();
-	infoWindow.setContent(html);
-
-	google.maps.event.addListener(polygon, 'click1', function(e) {
+function attachInfoWindow(poly, map, html) {
+	google.maps.event.addListener(poly, 'mouseover', function(e) {
+		var infoWindow = new google.maps.InfoWindow();
+		infoWindow.setContent(getHTMLForPloygonInfo(poly.state));
 		var latLng = e.latLng;
 		infoWindow.setPosition(latLng);
 		infoWindow.open(map);
+		poly.infoWindow = infoWindow;
 	});
 
-	google.maps.event.addListener(polygon, 'mousemove', function() {
-		// infoWindow.close(map);
+	google.maps.event.addListener(poly, 'mouseout', function() {
+		poly.infoWindow.close(map);
 	});
+}
+
+function getHTMLForPloygonInfo(state) {
+	perstate = (((crimesData[state])[$("#crime").val()])[$("#years").val()]);
+	var html = "<div  style='width:200px'><h4>" + state + "</h4><br/>"
+			+ "<b>Number of Incidents</b> : " + perstate + "<br/>"
+			+ "<b> Country Average </b> : " + Math.round(crimeAvgPerState)
+			+ "<br/>" + "<b> Country Highest </b> : " + crimeMaxPerState
+			+ "<br/>" + "<b> Country Lowest </b> : " + crimeMinPerState
+			+ "<br/>" + "</div>";
+	return html;
 }
 
 var crimesData = new Object();
@@ -202,6 +215,9 @@ var crimesList = new Array();
 var iStates = new Object();
 var states = new Object();
 var statesList = new Array();
+var crimeAvgPerState;
+var crimeMaxPerState;
+var crimeMinPerState;
 
 $.ajax({
 	url : "Data/crimes/crimes.txt",
@@ -263,11 +279,10 @@ function createCrimeSubList() {
 }
 
 function initDropDowns() {
-	for ( var hi in states) {
-		var o = new Option(states[hi], states[hi]);
-		$(o).html(states[hi]);
-		$("#slist").append(o);
-	}
+	/*
+	 * for (var hi in states) { var o = new Option(states[hi], states[hi]);
+	 * $(o).html(states[hi]); $("#slist").append(o); }
+	 */
 
 	for ( var hi in iCrimes) {
 		var o = new Option(iCrimes[hi], iCrimes[hi]);
@@ -339,11 +354,16 @@ function updateVisual() {
 		strokeWeight : 2.0,
 		fillColor : "#548f17"
 	});
+
 	polygons[crimeSortList[crimeSortList.length - 1].index].polygon
 			.setOptions({
 				strokeWeight : 2.0,
 				fillColor : "#981421"
 			});
+
+	crimeAvgPerState = avg;
+	crimeMinPerState = crimeSortList[0].stateCrimeRate;
+	crimeMaxPerState = crimeSortList[crimeSortList.length - 1].stateCrimeRate;
 
 	updateLineChart();
 	updateSunBurst();
@@ -417,6 +437,8 @@ function updateLineChart() {
 	var chart = c3.generate({
 		data : {
 			x : 'x',
+			// xFormat: '%YYYY', // 'xFormat' can be used as custom format of
+			// 'x'
 			columns : [ xAxis, lineGraph[1], lineGraph[2], lineGraph[3],
 					lineGraph[4], lineGraph[5] ]
 		},

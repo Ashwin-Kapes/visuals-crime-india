@@ -23,74 +23,71 @@ package com.vci;
  */
 public class ApacheHttpRestClient1 {
 
-	/*public static void main(String[] args) {
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		List<Integer> list = Arrays.asList(5021428, 5021261, 4859114, 27504746,
-				9282666, 23737810, 4813129, 21085952);
+    /*public static void main(String[] args) {
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        List<Integer> list = Arrays.asList(21086078,
+                23129256,
+                18434837,
+                22683516);
 
-		try {
-			for (Integer integer : list) {
+        try {
+            for (Integer integer : list) {
 
-				// specify the host, protocol, and port
-				HttpHost target = new HttpHost("weather.yahooapis.com", 80,
-						"http");
+                // specify the host, protocol, and port
+                HttpHost target = new HttpHost("api.wikimapia.org", 80, "http");
 
-				// specify the get request
-				HttpGet getRequest = new HttpGet(
-						"http://api.wikimapia.org/?function=place.getbyid&key=B1F01457-2A758715-8C3D054C-D15D765D-05226141-B2CB5186-C4A11005-B5621B1A&id="
-								+ integer + "&format=json");
+                // specify the get request
+                HttpGet getRequest = new HttpGet(
+                        "http://api.wikimapia.org/?key=B1F01457-30EE671F-A1DC148C-DBB21687-75A5FC31-B4824A1D-C7E29F60-26997DE9&function=place.getbyid&id="+integer+"&format=json&pack=&language=en");
 
-				System.out.println("executing request to " + target);
+                System.out.println("executing request to " + target);
 
-				HttpResponse httpResponse = httpclient.execute(target,
-						getRequest);
-				HttpEntity entity = httpResponse.getEntity();
+                HttpResponse httpResponse = httpclient.execute(target, getRequest);
+                HttpEntity entity = httpResponse.getEntity();
 
-				System.out.println("----------------------------------------");
-				System.out.println(httpResponse.getStatusLine());
-				Header[] headers = httpResponse.getAllHeaders();
-				for (int i = 0; i < headers.length; i++) {
-					System.out.println(headers[i]);
-				}
-				System.out.println("----------------------------------------");
-				String response = "";
-				if (entity != null) {
-					response = EntityUtils.toString(entity);
-					System.out.println(response);
-				}
+                System.out.println("----------------------------------------");
+                System.out.println(httpResponse.getStatusLine());
+                Header[] headers = httpResponse.getAllHeaders();
+                for (int i = 0; i < headers.length; i++) {
+                    System.out.println(headers[i]);
+                }
+                System.out.println("----------------------------------------");
+                String response = "";
+                if (entity != null) {
+                    response = EntityUtils.toString(entity);
+                    System.out.println(response);
+                }
 
-				writeData(integer, response);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			// When HttpClient instance is no longer needed,
-			// shut down the connection manager to ensure
-			// immediate deallocation of all system resources
-			httpclient.getConnectionManager().shutdown();
-		}
-	}
+                writeData(integer, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+        }
+    }
 
-	private static void writeData(Integer integer, String response) {
-		Writer writer = null;
+    private static void writeData(Integer integer, String response) {
+        Writer writer = null;
 
-		try {
-			String name = "/home/pratik/Installations/tomcat/webapps/poc/Data/gurgaon/"
-					+ integer;
-			File file = new File(name);
-			file.createNewFile();
-			writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(name), "utf-8"));
-			writer.write(response);
-		} catch (IOException ex) {
-			// report
-		} finally {
-			try {
-				writer.close();
-			} catch (Exception ex) {
-				System.out.println(ex);
-			}
-		}
+        try {
+            String name = "/home/pratik/Installations/tomcat/webapps/vci/Data/gurgaon/" + integer;
+            File file = new File(name);
+            file.createNewFile();
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(name), "utf-8"));
+            writer.write(response);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {
+                writer.close();
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }
 
-	}*/
+    }*/
 }
