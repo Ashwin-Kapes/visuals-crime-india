@@ -4,224 +4,223 @@
 
 <head>
 <script src="js/jquery.min.js"></script>
-<script
-	src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=visualization"></script>
-<script>
-	var styleArray = [ {
-		featureType : "all",
-		stylers : [ {
-			hue : '#010000'
-		} ]
-	} ];
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=visualization"></script>
+	  <script>
+var styleArray = [
+  {
+    featureType: "all",
+    stylers: [
+      { 
+       hue: '#010000' }
+    ]
+  }];	
 
-	stylers: [ {
-		saturation : -100
-	} ]
+stylers: [
+  { saturation: -100 }
+]
 
-	var featureOpts = [ {
-		stylers : [ {
-			hue : "#FFFFFF"
-		}, {
-			saturation : -100
-		}, {
-			lightness : 0
-		}, {
-			gamma : 1.51
-		} ]
-	}, {
-		elementType : 'labels',
-		stylers : [ {
-			visibility : 'on',
-			color : '#FFFFFF'
-		} ]
-	}, {
-		featureType : 'water',
-		stylers : [ {
-			color : '#FFFFF'
-		} ]
-	} ];
+var featureOpts = [
+    {
+      stylers: [
+  { hue: "#FFFFFF" },
+  { saturation: -100 },
+  { lightness: 0},
+  { gamma: 1.51 }
+]
+    },
+    {
+      elementType: 'labels',
+      stylers: [
+        { visibility: 'on',
+          color:'#FFFFFF' }
+      ]
+    },
+    {
+      featureType: 'water',
+      stylers: [
+        { color: '#FFFFF' }
+      ]
+    }
+  ];
 
-	// Adding 500 Data Points
-	var map, pointarray, heatmap;
+// Adding 500 Data Points
+var map, pointarray, heatmap;
 
-	var taxiData = [ {
-		location : new google.maps.LatLng(28.4700, 77.0300),
-		weight : 500
-	}, new google.maps.LatLng(37.782, -122.445), {
-		location : new google.maps.LatLng(28.4700, 77.0300),
-		weight : 800
-	}, {
-		location : new google.maps.LatLng(37.782, -122.443),
-		weight : 2
-	}, {
-		location : new google.maps.LatLng(37.782, -122.441),
-		weight : 3
-	}, {
-		location : new google.maps.LatLng(37.782, -122.439),
-		weight : 2
-	}, new google.maps.LatLng(37.782, -122.437), {
-		location : new google.maps.LatLng(37.782, -122.435),
-		weight : 0.5
-	},
+var taxiData = [
+  {location: new google.maps.LatLng(28.4700, 77.0300), weight: 500},
+  new google.maps.LatLng(37.782, -122.445),
+  {location: new google.maps.LatLng(28.4700, 77.0300), weight: 800},
+  {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
+  {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
+  {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
+  new google.maps.LatLng(37.782, -122.437),
+  {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
 
-	{
-		location : new google.maps.LatLng(37.785, -122.447),
-		weight : 3
-	}, {
-		location : new google.maps.LatLng(37.785, -122.445),
-		weight : 2
-	}, new google.maps.LatLng(37.785, -122.443), {
-		location : new google.maps.LatLng(37.785, -122.441),
-		weight : 0.5
-	}, new google.maps.LatLng(37.785, -122.439), {
-		location : new google.maps.LatLng(37.785, -122.437),
-		weight : 2
-	}, {
-		location : new google.maps.LatLng(37.785, -122.435),
-		weight : 3
-	} ];
+  {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
+  {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
+  new google.maps.LatLng(37.785, -122.443),
+  {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
+  new google.maps.LatLng(37.785, -122.439),
+  {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
+  {location: new google.maps.LatLng(37.785, -122.435), weight: 3},
 
-	var MY_MAPTYPE_ID = "custom_style";
+ {location: new google.maps.LatLng(29.4723, 77.7089), weight: 600},
+ {location: new google.maps.LatLng(28.8300, 78.7800), weight: 700},
+ {location: new google.maps.LatLng(28.2000, 79.3667), weight: 800},
+ {location: new google.maps.LatLng(25.7300, 82.6800), weight: 1200},
 
-	function initialize() {
-		var mapOptions = {
-			zoom : 5,
-			maxZoom : 13,
-			center : new google.maps.LatLng(23.29004039, 78.44355469),
-			mapTypeControlOptions : {
-				mapTypeIds : [ google.maps.MapTypeId.MAP, MY_MAPTYPE_ID ]
-			},
-			mapTypeId : MY_MAPTYPE_ID,
-			scrollwheel : false,
-			scaleControl : false,
-			zoomControl : false,
-			draggable : false,
-			disableDoubleClickZoom : true,
-			streetViewControl : false
-		};
 
-		map = new google.maps.Map(document.getElementById('map-canvas-heat'),
-				mapOptions);
+];
 
-		var styledMapOptions = {
-			name : 'Custom Style'
-		};
+var MY_MAPTYPE_ID = "custom_style";
 
-		var customMapType = new google.maps.StyledMapType(featureOpts,
-				styledMapOptions);
+function initialize() {
+ var mapOptions = {
+		zoom : 5,
+		maxZoom : 13,
+		center : new google.maps.LatLng(23.29004039, 78.44355469),
+		mapTypeControlOptions: {
+	        mapTypeIds: [google.maps.MapTypeId.MAP, MY_MAPTYPE_ID]
+		    },
+	    mapTypeId: MY_MAPTYPE_ID,	
+		scrollwheel : false,
+		scaleControl : false,
+		zoomControl : false,
+		draggable : false,
+		disableDoubleClickZoom : true,
+		streetViewControl : false
+	};
 
-		map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+  map = new google.maps.Map(document.getElementById('map-canvas-heat'),
+      mapOptions);
 
-		var pointArray = new google.maps.MVCArray(taxiData);
+	var styledMapOptions = {
+    name: 'Custom Style'
+  };
 
-		heatmap = new google.maps.visualization.HeatmapLayer({
-			data : pointArray
-		});
+  var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
 
-		heatmap.setMap(map);
-		heatmap.set('radius', heatmap.get('radius') ? null : 50);
-	}
+  map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
 
-	function toggleHeatmap() {
-		heatmap.setMap(heatmap.getMap() ? null : map);
-	}
 
-	function changeGradient() {
-		var gradient = [ 'rgba(0, 255, 255, 0)', 'rgba(0, 255, 255, 1)',
-				'rgba(0, 191, 255, 1)', 'rgba(0, 127, 255, 1)',
-				'rgba(0, 63, 255, 1)', 'rgba(0, 0, 255, 1)',
-				'rgba(0, 0, 223, 1)', 'rgba(0, 0, 191, 1)',
-				'rgba(0, 0, 159, 1)', 'rgba(0, 0, 127, 1)',
-				'rgba(63, 0, 91, 1)', 'rgba(127, 0, 63, 1)',
-				'rgba(191, 0, 31, 1)', 'rgba(255, 0, 0, 1)' ]
-		heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
-	}
+  var pointArray = new google.maps.MVCArray(taxiData);
 
-	function changeRadius() {
-		heatmap.set('radius', heatmap.get('radius') ? null : 50);
-	}
+  heatmap = new google.maps.visualization.HeatmapLayer({
+    data: pointArray
+  });
 
-	function changeOpacity() {
-		heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
-	}
-
-	google.maps.event.addDomListener(window, 'load', initialize);
-</script>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
-
-<title>Start Visualising</title>
-
-<!-- Bootstrap Core CSS -->
-<link href="css/bootstrap.css" rel="stylesheet">
-
-<!-- Custom CSS -->
-<style>
-body {
-	padding-top: 70px;
-	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+  heatmap.setMap(map);
+  heatmap.set('radius', heatmap.get('radius') ? null : 20);
 }
-</style>
 
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
+function toggleHeatmap() {
+  heatmap.setMap(heatmap.getMap() ? null : map);
+}
+
+function changeGradient() {
+  var gradient = [
+    'rgba(0, 255, 255, 0)',
+    'rgba(0, 255, 255, 1)',
+    'rgba(0, 191, 255, 1)',
+    'rgba(0, 127, 255, 1)',
+    'rgba(0, 63, 255, 1)',
+    'rgba(0, 0, 255, 1)',
+    'rgba(0, 0, 223, 1)',
+    'rgba(0, 0, 191, 1)',
+    'rgba(0, 0, 159, 1)',
+    'rgba(0, 0, 127, 1)',
+    'rgba(63, 0, 91, 1)',
+    'rgba(127, 0, 63, 1)',
+    'rgba(191, 0, 31, 1)',
+    'rgba(255, 0, 0, 1)'
+  ]
+  heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+}
+
+function changeRadius() {
+  heatmap.set('radius', heatmap.get('radius') ? null : 50);
+}
+
+function changeOpacity() {
+  heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Start Visualising</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+    body {
+        padding-top: 70px;
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-<style>
-html, body, #map-canvas {
-	height: 800px;
-	margin: 0px;
-	padding: 0px
-}
-
-html, body, #map-canvas-heat {
-	height: 800px;
-	margin: 0px;
-	padding: 0px
-}
-</style>
-
-
-</head>
+    <style>
+      html, body, #map-canvas {
+        height: 800px;
+        margin: 0px;
+        padding: 0px
+      }
+      html, body, #map-canvas-heat {
+        height: 800px;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+   
+    
+  </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Start Visualising</a>
-			</div>
-
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1"></div>
-
-		</div>
-
-	</nav>
-	<div id="map-canvas-heat"></div>
-
-	<div
-		style="height: 30px; background-color: #25588b; border-color: #25588b">
-	</div>
-	<div id="map-canvas"></div>
-	<div
-		style="height: 30px; background-color: #25588b; border-color: #25588b; text-align: center">
-		<span style="color: white">Data Sources : gov.data.in |
-			wikimapia.org | openstreetmaps.com</span>
-	</div>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/cities.js"></script>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Start Visualising</a>
+            </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                
+            </div>
+            
+        </div>
+        
+    </nav>
+    <div id="map-canvas"></div> 
+     
+     <div style="height: 30px; background-color: #25588b; border-color: #25588b">
+	 </div>
+	  <div id="map-canvas-heat"></div>
+    <div
+        style="height: 30px; background-color:#25588b; border-color: #25588b;text-align:center">
+        <span style="color:white">Data Sources :   gov.data.in | wikimapia.org | openstreetmaps.com</span>
+    </div>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/cities.js"></script>
 </body>
 
 </html>
