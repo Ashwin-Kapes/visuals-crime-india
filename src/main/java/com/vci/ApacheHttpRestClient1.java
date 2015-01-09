@@ -1,5 +1,22 @@
 package com.vci;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 
 /**
  * A simple Java REST GET example using the Apache HTTP library. This executes a
@@ -23,7 +40,7 @@ package com.vci;
  */
 public class ApacheHttpRestClient1 {
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         DefaultHttpClient httpclient = new DefaultHttpClient();
         List<Integer> list = Arrays.asList(21086078,
                 23129256,
@@ -89,5 +106,5 @@ public class ApacheHttpRestClient1 {
             }
         }
 
-    }*/
+    }
 }
